@@ -1,7 +1,10 @@
 using ECommerce.Business.Mappings;
 using ECommerce.Business.Services;
 using ECommerce.Business.Services.Interfaces;
+using ECommerce.Business.Validators;
 using ECommerce.DataAccess;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,12 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateProductDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateProductDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateCategoryDtoValidator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
