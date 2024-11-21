@@ -1,4 +1,5 @@
 using ECommerce.Business.Mappings;
+using ECommerce.Business.Middlewares;
 using ECommerce.Business.Services;
 using ECommerce.Business.Services.Interfaces;
 using ECommerce.Business.Validators;
@@ -37,6 +38,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ValidationMiddleware>();
 
 app.UseHttpsRedirection();
 

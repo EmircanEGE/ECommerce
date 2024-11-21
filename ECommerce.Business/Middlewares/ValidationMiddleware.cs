@@ -14,18 +14,23 @@ namespace ECommerce.Business.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (!context.Response.HasStarted)
+            try
             {
                 await _next(context);
+            }
+            catch (FluentValidation.ValidationException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                context.Response.ContentType = "application/json";
 
-                if (context.Response.StatusCode == 400 && context.Items.ContainsKey("ValidationErrors"))
+                var errors = ex.Errors.Select(e => new
                 {
-                    var errors = (List<string>)context.Items["ValidationErrors"];
-                    var response = new { errors };
+                    Field = e.PropertyName,
+                    Error = e.ErrorMessage
+                });
 
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync(JsonSerializer.Serialize(response));
-                }
+                var response = JsonSerializer.Serialize(new { Errors = errors });
+                await context.Response.WriteAsync(response);
             }
         }
     }
