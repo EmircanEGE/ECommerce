@@ -37,7 +37,7 @@ namespace ECommerce.Business.Services
 
         public async Task<List<ProductDto>> GetAllAsync()
         {
-            var products = await _context.Categories.ToListAsync();
+            var products = await _context.Products.ToListAsync();
             return _mapper.Map<List<ProductDto>>(products);
         }
 
