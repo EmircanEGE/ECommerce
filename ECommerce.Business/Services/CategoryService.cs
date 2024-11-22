@@ -3,6 +3,7 @@ using ECommerce.Business.Services.Interfaces;
 using ECommerce.DataAccess;
 using ECommerce.DTOs;
 using ECommerce.Entities;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Business.Services
@@ -35,9 +36,19 @@ namespace ECommerce.Business.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<CategoryDto>> GetAllAsync()
+        public async Task<List<CategoryDto>> GetAllAsync(int page, int pageSize, string sortBy, string order)
         {
-            var categories = await _context.Categories.ToListAsync();
+            var query = _context.Categories.AsQueryable();
+
+            query = sortBy.ToLower() switch
+            {
+                _ => order.ToLower() == "desc" ? query.OrderByDescending(p => p.Name) : query.OrderBy(p => p.Name)
+            };
+
+            var categories = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
             return _mapper.Map<List<CategoryDto>>(categories);
         }
 

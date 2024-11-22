@@ -35,9 +35,22 @@ namespace ECommerce.Business.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<ProductDto>> GetAllAsync()
+        public async Task<List<ProductDto>> GetAllAsync(int page, int pageSize, string sortBy, string order)
         {
-            var products = await _context.Products.ToListAsync();
+            var query = _context.Products.AsQueryable();
+
+            query = sortBy.ToLower() switch
+            {
+                "price" => order.ToLower() == "desc" ? query.OrderByDescending(p => p.Price) : query.OrderBy(p => p.Price),
+                "stock" => order.ToLower() == "desc" ? query.OrderByDescending(p => p.Stock) : query.OrderBy(p => p.Stock),
+                _ => order.ToLower() == "desc" ? query.OrderByDescending(p => p.Name) : query.OrderBy(p => p.Name)
+
+            };
+
+            var products = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
             return _mapper.Map<List<ProductDto>>(products);
         }
 

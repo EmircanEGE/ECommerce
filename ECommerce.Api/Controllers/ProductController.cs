@@ -16,9 +16,9 @@ namespace ECommerce.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] PaginationDto paginationDto, [FromQuery] string? sortBy = "name", [FromQuery] string? order = "asc")
         {
-            var products = await _productService.GetAllAsync();
+            var products = await _productService.GetAllAsync(paginationDto.Page, paginationDto.PageSize, sortBy, order);
             return Ok(products);
         }
 

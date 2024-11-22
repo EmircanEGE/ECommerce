@@ -4,7 +4,7 @@ namespace ECommerce.Business.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<List<CategoryDto>> GetAllAsync();
+        Task<List<CategoryDto>> GetAllAsync(int page, int pageSize, string sortBy, string order);
         Task<CategoryDto> GetByIdAsync(int id);
         Task AddAsync(CreateCategoryDto createCategoryDto);
         Task UpdateAsync(int id, UpdateCategoryDto updateCategoryDto);
