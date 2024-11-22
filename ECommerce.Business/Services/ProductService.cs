@@ -35,9 +35,12 @@ namespace ECommerce.Business.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<ProductDto>> GetAllAsync(int page, int pageSize, string sortBy, string order)
+        public async Task<List<ProductDto>> GetAllAsync(int page, int pageSize, string sortBy, string order, int? categoryId)
         {
             var query = _context.Products.AsQueryable();
+
+            if(categoryId.HasValue)
+                query = query.Where(c => c.CategoryId == categoryId);
 
             query = sortBy.ToLower() switch
             {
