@@ -1,5 +1,6 @@
 ﻿using ECommerce.Business.Services.Interfaces;
 using ECommerce.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers
@@ -15,6 +16,7 @@ namespace ECommerce.Api.Controllers
             _productService = productService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] PaginationDto paginationDto, [FromQuery] string? sortBy = "name", [FromQuery] string? order = "asc", [FromQuery] int? categoryId = null, [FromQuery] string? search = null)
         {
@@ -22,6 +24,7 @@ namespace ECommerce.Api.Controllers
             return Ok(products);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -36,6 +39,7 @@ namespace ECommerce.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateProductDto createProductDto)
         {
@@ -43,6 +47,7 @@ namespace ECommerce.Api.Controllers
             return Created("", new { message = "Product successfully created"});
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateProductDto updateProductDto)
         {
@@ -58,6 +63,7 @@ namespace ECommerce.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
