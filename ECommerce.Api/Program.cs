@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ECommerceContext>(options => options.UseNpgsql(bui
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

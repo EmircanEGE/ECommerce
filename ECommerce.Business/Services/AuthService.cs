@@ -56,7 +56,8 @@ namespace ECommerce.Business.Services
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim("userId", user.Id.ToString())
             };
 
             var token = new JwtSecurityToken(
