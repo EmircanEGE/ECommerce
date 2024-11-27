@@ -21,8 +21,8 @@ namespace ECommerce.Api.Controllers
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto)
         {
             var userId = int.Parse(User.FindFirst("userId").Value);
-            var orderId = await _orderService.CreateOrder(userId, createOrderDto);
-            return Ok(new { OrderId = orderId });
+            var order = await _orderService.CreateOrder(userId, createOrderDto);
+            return Ok(order);
         }
 
         [Authorize(Roles = "Admin,User")]

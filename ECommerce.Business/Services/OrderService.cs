@@ -18,24 +18,34 @@ namespace ECommerce.Business.Services
             _mapper = mapper;
         }
 
-        public async Task<int> CreateOrder(int userId, CreateOrderDto createOrderDto)
+        public async Task<OrderDto> CreateOrder(int userId, CreateOrderDto createOrderDto)
         {
             var order = new Order
             {
                 UserId = userId,
                 OrderDate = DateTime.UtcNow,
-                TotalAmount = createOrderDto.OrderItems.Sum(item => item.Quantity * item.UnitPrice),
-                OrderItems = createOrderDto.OrderItems.Select(item => new OrderItem
+                OrderItems = new List<OrderItem>()
+            };
+
+            foreach (var item in createOrderDto.OrderItems)
+            {
+                var product = await _context.Products.FindAsync(item.ProductId);
+                if (product == null)
+                    throw new Exception("Product not found!");
+
+                order.OrderItems.Add(new OrderItem
                 {
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    UnitPrice = item.UnitPrice,
-                }).ToList(),
-            };
+                    UnitPrice = product.Price
+                });
+            }
+
+            order.TotalAmount = order.OrderItems.Sum(x => x.Quantity * x.UnitPrice);
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-            return order.Id;
+            return _mapper.Map<OrderDto>(order);
         }
 
         public async Task<List<OrderDto>> GetOrdersByUser(int userId)
