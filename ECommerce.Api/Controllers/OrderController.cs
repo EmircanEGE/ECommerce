@@ -1,5 +1,6 @@
 ﻿using ECommerce.Business.Services.Interfaces;
 using ECommerce.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers
@@ -15,6 +16,7 @@ namespace ECommerce.Api.Controllers
             _orderService = orderService;
         }
 
+        [Authorize(Roles = ("Admin,User"))]
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto)
         {
@@ -23,6 +25,7 @@ namespace ECommerce.Api.Controllers
             return Ok(new { OrderId = orderId });
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
@@ -31,12 +34,29 @@ namespace ECommerce.Api.Controllers
             return Ok(orders);
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderDetails(int id)
         {
             var userId = int.Parse(User.FindFirst("userId").Value);
             var order = await _orderService.GetOrderDetails(id, userId);
             return Ok(order);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirst("userId").Value);
+                await _orderService.DeleteOrder(id, userId);
+                return Ok("Order successfully deleted.");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message});
+            }
         }
     }
 }

@@ -61,5 +61,15 @@ namespace ECommerce.Business.Services
             
             return _mapper.Map<OrderDto>(order);
         }
+
+        public async Task DeleteOrder(int orderId, int userId)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId && x.UserId == userId);
+            if (order == null)
+                throw new Exception("Order not found or access denied.");
+            
+            _context.Remove(order);
+            await _context.SaveChangesAsync();
+        }
     }
 }
