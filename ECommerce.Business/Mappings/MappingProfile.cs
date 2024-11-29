@@ -16,7 +16,7 @@ namespace ECommerce.Business.Mappings
             CreateMap<Product, CreateProductDto>().ReverseMap();
             CreateMap<Product, UpdateProductDto>().ReverseMap();
 
-            CreateMap<Order, OrderDto>().ReverseMap();
+            CreateMap<Order, OrderDto>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
             CreateMap<CreateOrderDto, OrderDto>().ReverseMap();
 
             CreateMap<OrderItem, OrderItemDto>().ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : "Unknown"));

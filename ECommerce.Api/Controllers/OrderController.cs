@@ -1,5 +1,6 @@
 ﻿using ECommerce.Business.Services.Interfaces;
 using ECommerce.DTOs;
+using ECommerce.Entities.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,6 +58,15 @@ namespace ECommerce.Api.Controllers
             {
                 return NotFound(new { message = ex.Message});
             }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateStatusOrder(int id, [FromBody]UpdateOrderStatusDto newStatus)
+        {
+            await _orderService.UpdateOrderStatus(id, newStatus.Status);
+            return Ok("Order status updated.");
+
         }
     }
 }

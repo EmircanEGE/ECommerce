@@ -3,6 +3,7 @@ using ECommerce.Business.Services.Interfaces;
 using ECommerce.DataAccess;
 using ECommerce.DTOs;
 using ECommerce.Entities;
+using ECommerce.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Business.Services
@@ -55,7 +56,7 @@ namespace ECommerce.Business.Services
                 .ThenInclude(xi => xi.Product)
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
-
+            
             return _mapper.Map<List<OrderDto>>(orders);
         }
 
@@ -79,6 +80,16 @@ namespace ECommerce.Business.Services
                 throw new Exception("Order not found or access denied.");
             
             _context.Remove(order);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateOrderStatus(int orderId, OrderStatus newStatus)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found or access denied.");
+
+            order.Status = newStatus;
             await _context.SaveChangesAsync();
         }
     }
