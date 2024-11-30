@@ -49,14 +49,17 @@ namespace ECommerce.Business.Services
             return _mapper.Map<OrderDto>(order);
         }
 
-        public async Task<List<OrderDto>> GetOrdersByUser(int userId)
+        public async Task<List<OrderDto>> GetOrdersByUser(int userId, OrderStatus? status)
         {
-            var orders = await _context.Orders
+            var query = _context.Orders
                 .Include(x => x.OrderItems)
                 .ThenInclude(xi => xi.Product)
-                .Where(x => x.UserId == userId)
-                .ToListAsync();
+                .Where(x => x.UserId == userId);
             
+            if (status.HasValue)
+                query = query.Where(x => x.Status == status.Value);
+            
+            var orders = await query.ToListAsync();
             return _mapper.Map<List<OrderDto>>(orders);
         }
 
