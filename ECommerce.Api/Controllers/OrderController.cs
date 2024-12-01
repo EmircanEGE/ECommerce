@@ -69,11 +69,11 @@ namespace ECommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id}/status")]
-        public async Task<IActionResult> UpdateStatusOrder(int id, [FromBody]UpdateOrderStatusDto newStatus)
+        [HttpPut("admin/orders/status")]
+        public async Task<IActionResult> UpdateStatusOrder(UpdateOrderStatusDto dto)
         {
-            await _orderService.UpdateOrderStatus(id, newStatus.Status);
-            return Ok("Order status updated.");
+            await _orderService.UpdateOrderStatus(dto.OrderId, dto.NewStatus);
+            return Ok("Order status updated successfully.");
 
         }
     }

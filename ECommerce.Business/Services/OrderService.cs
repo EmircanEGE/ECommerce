@@ -103,9 +103,15 @@ namespace ECommerce.Business.Services
 
         public async Task UpdateOrderStatus(int orderId, OrderStatus newStatus)
         {
-            var order = await _context.Orders.FindAsync(orderId);
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
             if (order == null)
-                throw new Exception("Order not found or access denied.");
+                throw new Exception("Order not found.");
+            if (order.Status == OrderStatus.Completed)
+                throw new Exception("Completed orders cannot be updated.");
+            if (order.Status == OrderStatus.Cancelled)
+                throw new Exception("Cancelled orders cannot be updated.");
+            if (order.Status != OrderStatus.Approved &&  newStatus == OrderStatus.Shipped)
+                throw new Exception("Orders must be approved before they can be marked as 'Shipped'.");
 
             order.Status = newStatus;
             await _context.SaveChangesAsync();

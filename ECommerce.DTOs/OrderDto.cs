@@ -19,6 +19,7 @@ namespace ECommerce.DTOs
     }
     public class UpdateOrderStatusDto
     {
-        public OrderStatus Status { get; set; }
+        public int OrderId { get; set; }
+        public OrderStatus NewStatus { get; set; }
     }
 }
