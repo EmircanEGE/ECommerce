@@ -7,6 +7,7 @@ namespace ECommerce.Business.Services.Interfaces
     {
         Task<OrderDto> CreateOrder(int userId, CreateOrderDto createOrderDto);
         Task<List<OrderDto>> GetOrdersByUser(int userId, OrderStatus? status);
+        Task<List<OrderDto>> GetOrders(int? userId, OrderStatus? status);
         Task<OrderDto> GetOrderDetails(int orderId, int userId);
         Task DeleteOrder(int orderId, int userId);
         Task UpdateOrderStatus(int orderId, OrderStatus newStatus);

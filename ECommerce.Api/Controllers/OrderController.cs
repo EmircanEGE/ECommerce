@@ -1,6 +1,5 @@
 ﻿using ECommerce.Business.Services.Interfaces;
 using ECommerce.DTOs;
-using ECommerce.Entities;
 using ECommerce.Entities.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ namespace ECommerce.Api.Controllers
             _orderService = orderService;
         }
 
-        [Authorize(Roles = ("Admin,User"))]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto)
         {
@@ -27,16 +26,24 @@ namespace ECommerce.Api.Controllers
             return Ok(order);
         }
 
-        [Authorize(Roles = "Admin,User")]
-        [HttpGet]
-        public async Task<IActionResult> GetOrders([FromQuery] OrderStatus? status = null)
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin/orders")]
+        public async Task<IActionResult> GetAllOrders([FromQuery] int? userId, [FromQuery] OrderStatus? status = null)
+        {
+            var orders = await _orderService.GetOrders(userId, status);
+            return Ok(orders);
+        }
+
+        [Authorize]
+        [HttpGet("user/orders")]
+        public async Task<IActionResult> GetUserOrders([FromQuery] OrderStatus? status = null)
         {
             var userId = int.Parse(User.FindFirst("userId").Value);
             var orders = await _orderService.GetOrdersByUser(userId, status);
             return Ok(orders);
         }
 
-        [Authorize(Roles = "Admin,User")]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderDetails(int id)
         {
