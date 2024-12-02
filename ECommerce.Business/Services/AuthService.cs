@@ -24,6 +24,9 @@ namespace ECommerce.Business.Services
 
         public async Task<string> Register(UserRegisterDto userRegisterDto)
         {
+            if (await _context.Users.AnyAsync(x => x.Username == userRegisterDto.Username))
+                throw new Exception("This username is already taken");
+            
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(userRegisterDto.Password);
 
             var user = new User
