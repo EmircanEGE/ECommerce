@@ -13,5 +13,7 @@ namespace ECommerce.Business.Services.Interfaces
         Task UpdateOrderStatus(int orderId, OrderStatus newStatus);
         Task CancelOrderByUser(int userId, int orderId, string? reason);
         Task CancelOrderByAdmin(int orderId, string? reason);
+        Task UpdateTotalAmount(int orderId);
+        Task UpdateOrderItem(int orderItemId, int quantity);
     }
 }

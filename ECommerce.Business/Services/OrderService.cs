@@ -146,5 +146,36 @@ namespace ECommerce.Business.Services
             
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateTotalAmount(int orderId)
+        {
+            var order = await _context.Orders
+                .Include(x=> x.OrderItems)
+                .FirstOrDefaultAsync(x => x.Id == orderId);
+
+            if (order == null)
+                throw new Exception("Order not found.");
+            if(!order.OrderItems.Any())
+                throw new Exception("Order has no items.");
+            
+            order.TotalAmount = order.OrderItems.Sum(x => x.Quantity * x.UnitPrice);
+            
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateOrderItem(int orderItemId, int quantity)
+        {
+            var orderItem = await _context.OrderItems
+                .Include(x=> x.Order)
+                .FirstOrDefaultAsync(x => x.Id == orderItemId);
+            
+            if (orderItem == null)
+                throw new Exception("Order item not found.");
+            if(quantity <= 0)
+                throw new Exception("Quantity cannot be less or equal to zero.");
+            
+            orderItem.Quantity = quantity;
+            await _context.SaveChangesAsync();
+        }
     }
 }
