@@ -116,5 +116,35 @@ namespace ECommerce.Business.Services
             order.Status = newStatus;
             await _context.SaveChangesAsync();
         }
+
+        public async Task CancelOrderByUser(int userId, int orderId, string? reason)
+        {
+            var order = _context.Orders.FirstOrDefault(x => x.Id == orderId && x.UserId == userId);
+            if (order == null)
+                throw new Exception("Order not found or access denied.");
+            
+            if(order.Status != OrderStatus.Pending)
+                throw new Exception("Only pending orders can be cancelled.");
+            
+            order.Status = OrderStatus.Cancelled;
+            order.CancelledReason = reason;
+            
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CancelOrderByAdmin(int orderId, string? reason)
+        {
+            var order = _context.Orders.FirstOrDefault(x => x.Id == orderId);
+            if (order == null)
+                throw new Exception("Order not found or access denied.");
+            
+            if (order.Status == OrderStatus.Completed)
+                throw new Exception("Completed orders cannot be cancelled.");
+            
+            order.Status = OrderStatus.Cancelled;
+            order.CancelledReason = reason;
+            
+            await _context.SaveChangesAsync();
+        }
     }
 }

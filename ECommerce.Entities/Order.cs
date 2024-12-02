@@ -9,6 +9,7 @@ namespace ECommerce.Entities
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        public string? CancelledReason { get; set; }
 
         public virtual User User { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }

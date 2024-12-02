@@ -76,5 +76,22 @@ namespace ECommerce.Api.Controllers
             return Ok("Order status updated successfully.");
 
         }
+
+        [Authorize]
+        [HttpPut("user/orders/{orderId}/cancel")]
+        public async Task<IActionResult> CancelOrderByUser(int orderId, [FromBody] string? reason = null)
+        {
+            var userId = int.Parse(User.FindFirst("userId").Value);
+            await _orderService.CancelOrderByUser(userId, orderId, reason);
+            return Ok("Order has been cancelled successfully.");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("admin/orders/{orderId}/cancel")]
+        public async Task<IActionResult> CancelOrderByAdmin(int orderId, [FromBody] string? reason = null)
+        {
+            await _orderService.CancelOrderByAdmin(orderId, reason);
+            return Ok("Order has been cancelled successfully.");
+        }
     }
 }
