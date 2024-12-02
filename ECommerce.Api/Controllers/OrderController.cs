@@ -93,5 +93,21 @@ namespace ECommerce.Api.Controllers
             await _orderService.CancelOrderByAdmin(orderId, reason);
             return Ok("Order has been cancelled successfully.");
         }
+
+        [Authorize]
+        [HttpPut("user/orders/{orderId}/update-total")]
+        public async Task<IActionResult> UpdateOrderTotal(int orderId)
+        {
+            await _orderService.UpdateTotalAmount(orderId);
+            return Ok("Order total amount has been updated.");
+        }
+
+        [Authorize]
+        [HttpPut("user/order-items/{orderItemId}")]
+        public async Task<IActionResult> UpdateOrderItem(int orderItemId, [FromBody] int quantity)
+        {
+            await _orderService.UpdateOrderItem(orderItemId, quantity);
+            return Ok("Order item has been updated, and total amount recalculated.");
+        }
     }
 }
