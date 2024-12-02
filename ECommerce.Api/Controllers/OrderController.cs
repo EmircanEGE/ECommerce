@@ -79,7 +79,7 @@ namespace ECommerce.Api.Controllers
 
         [Authorize]
         [HttpPut("user/orders/{orderId}/cancel")]
-        public async Task<IActionResult> CancelOrderByUser(int orderId, [FromBody] string? reason = null)
+        public async Task<IActionResult> CancelOrderByUser(int orderId, [FromBody] string reason)
         {
             var userId = int.Parse(User.FindFirst("userId").Value);
             await _orderService.CancelOrderByUser(userId, orderId, reason);
@@ -88,7 +88,7 @@ namespace ECommerce.Api.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("admin/orders/{orderId}/cancel")]
-        public async Task<IActionResult> CancelOrderByAdmin(int orderId, [FromBody] string? reason = null)
+        public async Task<IActionResult> CancelOrderByAdmin(int orderId, [FromBody] string reason)
         {
             await _orderService.CancelOrderByAdmin(orderId, reason);
             return Ok("Order has been cancelled successfully.");
