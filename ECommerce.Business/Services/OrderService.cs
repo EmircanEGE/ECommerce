@@ -219,5 +219,28 @@ namespace ECommerce.Business.Services
                 TopProducts = topProducts
             };
         }
+
+        public async Task CreateReturnRequest(int userId, int orderId, string reason)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId && x.UserId == userId);
+            if (order == null) 
+                throw new Exception("Order not found or access denied.");
+            
+            if (order.Status != OrderStatus.Completed)
+                throw new Exception("Return request can only be created for completed orders.");
+
+            var existingRequest = await _context.ReturnRequests.AnyAsync(x => x.OrderId == orderId && x.Status == RequestStatus.Pending);
+            if (existingRequest)
+                throw new Exception("There is already a pending request for this order.");
+
+            var returnRequest = new ReturnRequest
+            {
+                OrderId = orderId,
+                Reason = reason
+            };
+            
+            await _context.ReturnRequests.AddAsync(returnRequest);
+            await _context.SaveChangesAsync();
+        }
     }
 }

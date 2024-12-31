@@ -117,5 +117,14 @@ namespace ECommerce.Api.Controllers
             var report = await _orderService.GenerateOrderReport(startDate, endDate);
             return Ok(report);
         }
+
+        [Authorize]
+        [HttpPost("user/orders/{orderId}/return")]
+        public async Task<IActionResult> CreateReturnOrder(int orderId, [FromBody] string reason)
+        {
+            var userId = int.Parse(User.FindFirst("userId").Value);
+            await _orderService.CreateReturnRequest(userId, orderId, reason);
+            return Ok("Return request has been created successfully.");
+        }
     }
 }

@@ -14,6 +14,8 @@ namespace ECommerce.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<ReturnRequest> ReturnRequests { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -16,5 +16,6 @@ namespace ECommerce.Business.Services.Interfaces
         Task UpdateTotalAmount(int orderId);
         Task UpdateOrderItem(int orderItemId, int quantity);
         Task<OrderReportDto> GenerateOrderReport(DateTime? startDate, DateTime? endDate);
+        Task CreateReturnRequest(int userId, int orderId, string reason);
     }
 }
