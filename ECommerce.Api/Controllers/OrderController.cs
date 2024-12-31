@@ -109,5 +109,13 @@ namespace ECommerce.Api.Controllers
             await _orderService.UpdateOrderItem(orderItemId, quantity);
             return Ok("Order item has been updated, and total amount recalculated.");
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin/orders/report")]
+        public async Task<IActionResult> GetOrderReport([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        {
+            var report = await _orderService.GenerateOrderReport(startDate, endDate);
+            return Ok(report);
+        }
     }
 }

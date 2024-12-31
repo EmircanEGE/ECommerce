@@ -179,5 +179,45 @@ namespace ECommerce.Business.Services
             orderItem.Quantity = quantity;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<OrderReportDto> GenerateOrderReport(DateTime? startDate, DateTime? endDate)
+        {
+            var query = _context.Orders
+                .Include(x => x.OrderItems)
+                .ThenInclude(xi => xi.Product)
+                .AsQueryable();
+            
+            if (startDate.HasValue)
+                query = query.Where(x => x.OrderDate >= startDate);
+            
+            if (endDate.HasValue)
+                query = query.Where(x => x.OrderDate <= endDate);
+            
+            var totalSales = await query.SumAsync(o => o.TotalAmount);
+            var totalOrders = await query.CountAsync();
+            var CancelledOrders = await query.CountAsync(x => x.Status == OrderStatus.Cancelled);
+            var CompletedOrders = await query.CountAsync(x => x.Status == OrderStatus.Completed);
+            
+            var topProducts = await query
+                .SelectMany(o => o.OrderItems)
+                .GroupBy(oi => oi.Product.Name)
+                .Select(g => new TopProductDto
+                {
+                    ProductName = g.Key,
+                    QuantitySold = g.Sum(x => x.Quantity)
+                })
+                .OrderByDescending(tp => tp.QuantitySold)
+                .Take(5)
+                .ToListAsync();
+
+            return new OrderReportDto
+            {
+                TotalSales = totalSales,
+                TotalOrders = totalOrders,
+                CancelledOrders = CancelledOrders,
+                CompletedOrders = CompletedOrders,
+                TopProducts = topProducts
+            };
+        }
     }
 }

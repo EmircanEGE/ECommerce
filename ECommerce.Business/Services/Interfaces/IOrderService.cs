@@ -15,5 +15,6 @@ namespace ECommerce.Business.Services.Interfaces
         Task CancelOrderByAdmin(int orderId, string reason);
         Task UpdateTotalAmount(int orderId);
         Task UpdateOrderItem(int orderItemId, int quantity);
+        Task<OrderReportDto> GenerateOrderReport(DateTime? startDate, DateTime? endDate);
     }
 }
