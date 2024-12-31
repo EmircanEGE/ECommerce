@@ -9,4 +9,6 @@ public class ReturnRequest
     public string Reason { get; set; }
     public RequestStatus Status { get; set; } = RequestStatus.Pending;
     public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
+    
+    public virtual Order Order { get; set; }
 }

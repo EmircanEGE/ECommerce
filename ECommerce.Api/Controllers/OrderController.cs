@@ -126,5 +126,29 @@ namespace ECommerce.Api.Controllers
             await _orderService.CreateReturnRequest(userId, orderId, reason);
             return Ok("Return request has been created successfully.");
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin/orders/return")]
+        public async Task<IActionResult> GetReturnOrders([FromQuery] PaginationDto pagination, int? requestId, [FromQuery] RequestStatus? status = null)
+        {
+            var orders = await _orderService.GetReturnRequests(requestId, status, pagination);
+            return Ok(orders);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("admin/orders/return/{requestId}/approve")]
+        public async Task<IActionResult> ApproveReturnRequest(int requestId)
+        {
+            await _orderService.ApproveReturnRequest(requestId);
+            return Ok("Return request approved successfully.");
+        }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpPut("admin/orders/return/{requestId}/reject")]
+        public async Task<IActionResult> RejectReturnRequest(int requestId, [FromBody] string reason)
+        {
+            await _orderService.RejectReturnRequest(requestId, reason);
+            return Ok("Return request rejected successfully.");
+        }
     }
 }

@@ -242,5 +242,54 @@ namespace ECommerce.Business.Services
             await _context.ReturnRequests.AddAsync(returnRequest);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<ReturnRequestDto>> GetReturnRequests(int? requestId, RequestStatus? status, PaginationDto pagination)
+        {
+            var query = _context.ReturnRequests
+                .Include(r => r.Order)
+                .AsQueryable();
+        
+            if (requestId.HasValue)
+                query = query.Where(r => r.Id == requestId);
+            
+            if (status.HasValue)
+                query = query.Where(r => r.Status == status);
+            
+            var returnRequests = await query
+                .Skip((pagination.Page - 1) * pagination.PageSize)
+                .Take(pagination.PageSize)
+                .ToListAsync();
+            
+            return _mapper.Map<List<ReturnRequestDto>>(returnRequests);
+        }
+
+        public async Task ApproveReturnRequest(int requestId)
+        {
+            var returnRequest = await _context.ReturnRequests.FirstOrDefaultAsync(x => x.Id == requestId);
+            
+            if (returnRequest == null)
+                throw new Exception("Return request not found!");
+            
+            if (returnRequest.Status != RequestStatus.Pending)
+                throw new Exception("Only pending requests can be approved.");
+            
+            returnRequest.Status = (RequestStatus.Approved);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RejectReturnRequest(int requestId, string rejectionReason)
+        {
+            var returnRequest = await _context.ReturnRequests.FirstOrDefaultAsync(x => x.Id == requestId);
+            
+            if (returnRequest == null)
+                throw new Exception("Return request not found!");
+            
+            if (returnRequest.Status != RequestStatus.Pending)
+                throw new Exception("Only pending requests can be approved.");
+            
+            returnRequest.Status = RequestStatus.Rejected;
+            returnRequest.Reason = rejectionReason;
+            await _context.SaveChangesAsync();
+        }
     }
 }
