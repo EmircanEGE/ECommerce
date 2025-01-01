@@ -285,7 +285,7 @@ namespace ECommerce.Business.Services
                 throw new Exception("Return request not found!");
             
             if (returnRequest.Status != RequestStatus.Pending)
-                throw new Exception("Only pending requests can be approved.");
+                throw new Exception("Only pending requests can be rejected.");
             
             returnRequest.Status = RequestStatus.Rejected;
             returnRequest.Reason = rejectionReason;
