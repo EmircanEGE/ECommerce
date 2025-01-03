@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ECommerce.DTOs;
 using ECommerce.Entities;
+using ECommerce.Entities.Enums;
 
 namespace ECommerce.Business.Mappings
 {
@@ -23,6 +24,7 @@ namespace ECommerce.Business.Mappings
             CreateMap<CreateOrderItemDto, OrderItemDto>().ReverseMap();
 
             CreateMap<ReturnRequest, ReturnRequestDto>().ReverseMap();
+            CreateMap<Order, DeliveryStatusDto>().ReverseMap();
         }
     }
 }

@@ -21,5 +21,8 @@ namespace ECommerce.Business.Services.Interfaces
         Task<List<ReturnRequestDto>> GetReturnRequests(int? requestId, RequestStatus? status, PaginationDto pagination);
         Task ApproveReturnRequest(int requestId);
         Task RejectReturnRequest(int requestId, string rejectionReason);
+        Task<DeliveryStatus> GetDeliveryStatus(int userId, int orderId);
+        Task<List<DeliveryStatusDto>> GetDeliveryStatusAdmin(DeliveryStatus? status, DateTime? startDate,
+            DateTime? endDate);
     }
 }

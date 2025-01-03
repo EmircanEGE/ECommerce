@@ -150,5 +150,22 @@ namespace ECommerce.Api.Controllers
             await _orderService.RejectReturnRequest(requestId, reason);
             return Ok("Return request rejected successfully.");
         }
+        
+        [Authorize]
+        [HttpGet("user/orders/delivery-status")]
+        public async Task<IActionResult> GetDeliveryStatus(int orderId)
+        {
+            var userId = int.Parse(User.FindFirst("userId").Value);
+            var orders = await _orderService.GetDeliveryStatus(userId, orderId);
+            return Ok(orders);
+        }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin/orders/delivery-status")]
+        public async Task<IActionResult> GetDeliveryStatusAdmin(DeliveryStatus? status, DateTime? startDate, DateTime? endDate)
+        {
+            var orders = await _orderService.GetDeliveryStatusAdmin(status, startDate, endDate);
+            return Ok(orders);
+        }
     }
 }

@@ -291,5 +291,32 @@ namespace ECommerce.Business.Services
             returnRequest.Reason = rejectionReason;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<DeliveryStatus> GetDeliveryStatus(int userId, int orderId)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == orderId);
+            if (order == null)
+                throw new Exception("Order not found or access denied.");
+
+            return order.DeliveryStatus;
+        }
+
+        public async Task<List<DeliveryStatusDto>> GetDeliveryStatusAdmin(DeliveryStatus? status, DateTime? startDate,
+            DateTime? endDate)
+        {
+            var query = _context.Orders.AsQueryable();
+            
+            if (status.HasValue)
+                query = query.Where(x => x.DeliveryStatus == status.Value);
+            
+            if (startDate.HasValue)
+                query = query.Where(x => x.OrderDate >= startDate);
+            
+            if (endDate.HasValue)
+                query = query.Where(x => x.OrderDate <= endDate);
+            
+            var orders = await query.ToListAsync();
+            return _mapper.Map<List<DeliveryStatusDto>>(orders);
+        }
     }
 }
