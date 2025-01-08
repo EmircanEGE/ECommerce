@@ -1,4 +1,4 @@
-﻿using ECommerce.DTOs;
+﻿using ECommerce.Business.DTOs;
 using ECommerce.Entities.Enums;
 
 namespace ECommerce.Business.Services.Interfaces

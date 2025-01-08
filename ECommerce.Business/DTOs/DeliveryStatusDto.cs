@@ -1,6 +1,6 @@
 using ECommerce.Entities.Enums;
 
-namespace ECommerce.DTOs;
+namespace ECommerce.Business.DTOs;
 
 public class DeliveryStatusDto
 {

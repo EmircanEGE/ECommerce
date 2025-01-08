@@ -1,6 +1,6 @@
-﻿namespace ECommerce.DTOs
+﻿namespace ECommerce.Business.DTOs
 {
-    public class UserLoginDto
+    public class UserRegisterDto
     {
         public string Username { get; set; }
         public string Password { get; set; }

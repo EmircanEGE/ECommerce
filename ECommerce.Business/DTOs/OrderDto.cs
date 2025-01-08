@@ -1,7 +1,7 @@
-﻿using ECommerce.Entities.Enums;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using ECommerce.Entities.Enums;
 
-namespace ECommerce.DTOs
+namespace ECommerce.Business.DTOs
 {
     public class OrderDto
     {

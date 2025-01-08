@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ECommerce.DataAccess\ECommerce.DataAccess.csproj" />
-    <ProjectReference Include="..\ECommerce.DTOs\ECommerce.DTOs.csproj" />
   </ItemGroup>
 
 </Project>

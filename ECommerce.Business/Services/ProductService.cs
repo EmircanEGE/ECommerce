@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using ECommerce.Business.DTOs;
 using ECommerce.Business.Services.Interfaces;
 using ECommerce.DataAccess;
-using ECommerce.DTOs;
 using ECommerce.Entities;
 using Microsoft.EntityFrameworkCore;
 

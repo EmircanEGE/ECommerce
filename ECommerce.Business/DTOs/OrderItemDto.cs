@@ -1,4 +1,4 @@
-﻿namespace ECommerce.DTOs
+﻿namespace ECommerce.Business.DTOs
 {
     public class OrderItemDto
     {

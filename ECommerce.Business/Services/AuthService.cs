@@ -1,6 +1,5 @@
 ﻿using ECommerce.Business.Services.Interfaces;
 using ECommerce.DataAccess;
-using ECommerce.DTOs;
 using ECommerce.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ECommerce.Business.DTOs;
 
 namespace ECommerce.Business.Services
 {

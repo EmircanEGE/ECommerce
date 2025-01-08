@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ECommerce.DTOs;
+using ECommerce.Business.DTOs;
 using ECommerce.Entities;
 using ECommerce.Entities.Enums;
 
