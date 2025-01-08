@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace ECommerce.DataAccess.Migrations;
+namespace ECommerce.DataAccess;
 
 public interface IUnitOfWork
 {
